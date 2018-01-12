@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "978605299021",
+    "firebase_url": "https://bodappuser.firebaseio.com",
+    "project_id": "bodappuser",
+    "storage_bucket": "bodappuser.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:978605299021:android:1d7dde3d3fc45fdc",
+        "android_client_info": {
+          "package_name": "com.lentimosystems.bodappuser"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "978605299021-k1bggtof3c7tcimqphta2se8hgbh2prh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.lentimosystems.bodappuser",
+            "certificate_hash": "3b4a0cd50fea19f83fd1637ed571024a6168a1b9"
+          }
+        },
+        {
+          "client_id": "978605299021-3vn5ve7fu4br7g8ulbjptlpt0ssqbucj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDyC3LvnQthEQ90sWZ7VjNbT0bVOWjOf5E"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "978605299021-3vn5ve7fu4br7g8ulbjptlpt0ssqbucj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
