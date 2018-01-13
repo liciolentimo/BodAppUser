@@ -15,14 +15,19 @@ buildscript {
 
 allprojects {
     repositories {
-      //  google()
+        //  google()
         jcenter()
         maven {
             url 'http://dl.bintray.com/glomadrian/maven'
         }
-    }
-}
+        maven {
+            url 'https://maven.google.com'
 
-task clean(type: Delete) {
-    delete rootProject.buildDir
+        }
+    }
+
+
+    task clean(type: Delete) {
+        delete rootProject.buildDir
+    }
 }

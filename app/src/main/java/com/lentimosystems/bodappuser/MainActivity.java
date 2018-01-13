@@ -21,6 +21,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.lentimosystems.bodappuser.Model.Rider;
+import com.lentimosystems.bodappuser.Home;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
 import dmax.dialog.SpotsDialog;
@@ -80,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
         dialog.setMessage("Please use email to sign in");
 
         LayoutInflater inflater = LayoutInflater.from(this);
-        View login_layout = inflater.inflate(R.layout.layout_login,null);
+        View login_layout = inflater.inflate(R.layout.layout_signin,null);
 
         final MaterialEditText edtEmail = login_layout.findViewById(R.id.edtEmail);
         final MaterialEditText edtPassword = login_layout.findViewById(R.id.edtPassword);
@@ -123,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onSuccess(AuthResult authResult) {
                                 waitingDialog.dismiss();
-                                startActivity(new Intent(MainActivity.this,Welcome.class));
+                                startActivity(new Intent(MainActivity.this,Home.class));
                                 finish();
                             }
                         }).addOnFailureListener(new OnFailureListener() {
