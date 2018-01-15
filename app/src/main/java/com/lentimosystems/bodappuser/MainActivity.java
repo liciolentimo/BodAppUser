@@ -20,6 +20,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.lentimosystems.bodappuser.Common.Common;
 import com.lentimosystems.bodappuser.Model.Rider;
 import com.lentimosystems.bodappuser.Home;
 import com.rengwuxian.materialedittext.MaterialEditText;
@@ -57,15 +58,16 @@ public class MainActivity extends AppCompatActivity {
 
         auth = FirebaseAuth.getInstance();
         db = FirebaseDatabase.getInstance();
-        users = db.getReference("Riders");
+        users = db.getReference(Common.user_rider_tbl);
         rootLayout = (RelativeLayout)findViewById(R.id.rootLayout);
 
-        btnRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showRegisterDialog();
-            }
+    btnRegister.setOnClickListener(new View.OnClickListener() {
+         @Override
+        public void onClick(View v) {
+            showRegisterDialog();
+           }
         });
+
 
         btnSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
