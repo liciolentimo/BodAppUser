@@ -47,10 +47,20 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
 import com.lentimosystems.bodappuser.BottomSheetRiderFragment;
 import com.lentimosystems.bodappuser.Common.Common;
 import com.lentimosystems.bodappuser.Helper.CustomInfoWindow;
+import com.lentimosystems.bodappuser.Model.Data;
+import com.lentimosystems.bodappuser.Model.FCMResponse;
 import com.lentimosystems.bodappuser.Model.Rider;
+import com.lentimosystems.bodappuser.Model.Sender;
+import com.lentimosystems.bodappuser.Model.Token;
+import com.lentimosystems.bodappuser.Remote.IFCMService;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class Home extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,OnMapReadyCallback,
@@ -88,6 +98,9 @@ public class Home extends AppCompatActivity
     int distance = 1;
     private static final int LIMIT = 3;
 
+    //Send Alert
+    IFCMService mService;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,7 +108,7 @@ public class Home extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
+        mService = Common.getFCMService();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -124,11 +137,53 @@ public class Home extends AppCompatActivity
         btnPickupRequest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (!isDriverFound)
                 requestPickupHere(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                else
+                    sendRequestToDriver(driverId);
             }
         });
 
         setUpLocation();
+    }
+
+    private void sendRequestToDriver(String driverId) {
+        DatabaseReference tokens = FirebaseDatabase.getInstance().getReference(Common.token_tbl);
+        tokens.orderByKey().equalTo(driverId)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot postSnapshot:dataSnapshot.getChildren())
+                        {
+                            Token token = postSnapshot.getValue(Token.class);
+
+                            String json_lat_lng = new Gson().toJson(new LatLng(mLastLocation.getLatitude(),mLastLocation.getLongitude()));
+                            Data data = new Data("LentimoSystems",json_lat_lng);
+                            Sender content = new Sender(data,token.getToken());
+
+                            mService.sendMessage(sender)
+                                    .enqueue(new Callback<FCMResponse>() {
+                                        @Override
+                                        public void onResponse(Call<FCMResponse> call, Response<FCMResponse> response) {
+                                            if (response.body().success == 1)
+                                                Toast.makeText(Home.this, "Request sent!", Toast.LENGTH_SHORT).show();
+                                            else
+                                                Toast.makeText(Home.this, "Failed!", Toast.LENGTH_SHORT).show();
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<FCMResponse> call, Throwable t) {
+                                            Log.e("ERROR!",t.getMessage());
+                                        }
+                                    });
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
     }
 
     private void requestPickupHere(String uid) {
