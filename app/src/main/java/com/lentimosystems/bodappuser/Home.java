@@ -47,6 +47,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.Gson;
 import com.lentimosystems.bodappuser.BottomSheetRiderFragment;
 import com.lentimosystems.bodappuser.Common.Common;
@@ -145,6 +146,17 @@ public class Home extends AppCompatActivity
         });
 
         setUpLocation();
+
+        updateFirebaseToken();
+    }
+
+    private void updateFirebaseToken() {
+        FirebaseDatabase db = FirebaseDatabase.getInstance();
+        DatabaseReference tokens = db.getReference(Common.token_tbl);
+
+        Token token = new Token(FirebaseInstanceId.getInstance().getToken());
+        tokens.child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .setValue(token);
     }
 
     private void sendRequestToDriver(String driverId) {
@@ -161,7 +173,7 @@ public class Home extends AppCompatActivity
                             Data data = new Data("LentimoSystems",json_lat_lng);
                             Sender content = new Sender(data,token.getToken());
 
-                            mService.sendMessage(sender)
+                            mService.sendMessage(content)
                                     .enqueue(new Callback<FCMResponse>() {
                                         @Override
                                         public void onResponse(Call<FCMResponse> call, Response<FCMResponse> response) {
