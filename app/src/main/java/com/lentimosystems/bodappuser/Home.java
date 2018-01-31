@@ -173,7 +173,8 @@ public class Home extends AppCompatActivity
                             Token token = postSnapshot.getValue(Token.class);
 
                             String json_lat_lng = new Gson().toJson(new LatLng(mLastLocation.getLatitude(),mLastLocation.getLongitude()));
-                            Data data = new Data("LentimoSystems",json_lat_lng);
+                            String riderToken = FirebaseInstanceId.getInstance().getToken();
+                            Data data = new Data(riderToken,json_lat_lng);
                             Sender content = new Sender(data,token.getToken());
 
                             mService.sendMessage(content)
