@@ -1,10 +1,11 @@
-<resources>
+ <resources>
     <string name="app_name">BodAppUser</string>
     <string name="title_activity_welcome">Map</string>
     <string name="title_activity_home">Home</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+     <string name="google_direction_api">AIzaSyAMtnZqH8R7-v0XVhtfOgZUW2ex5rvAido</string><!-- in place of google browser api -->
 
     <string name="action_settings">Settings</string>
 </resources>
