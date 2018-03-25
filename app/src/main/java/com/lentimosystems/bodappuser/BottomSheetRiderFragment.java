@@ -27,16 +27,18 @@ import retrofit2.Response;
 
 public class BottomSheetRiderFragment extends BottomSheetDialogFragment {
     String mLocation,mDestination;
+    boolean isTapOnMap;
 
     IGoogleAPI mService;
-    TextView txtCalculate;
+    TextView txtCalculate, txtLocation, txtDestination;
 
-    public static BottomSheetRiderFragment newInstance(String location,String destination)
+    public static BottomSheetRiderFragment newInstance(String location,String destination,boolean isTapOnMap)
     {
         BottomSheetRiderFragment f = new BottomSheetRiderFragment();
         Bundle args = new Bundle();
         args.putString("location",location);
         args.putString("destination",destination);
+        args.putBoolean("isTapOnMap", isTapOnMap);
         f.setArguments(args);
         return f;
     }
@@ -46,20 +48,24 @@ public class BottomSheetRiderFragment extends BottomSheetDialogFragment {
         super.onCreate(savedInstanceState);
         mLocation = getArguments().getString("location");
         mDestination = getArguments().getString("destination");
+        isTapOnMap = getArguments().getBoolean("isTapOnMap");
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.bottom_sheet_rider,container,false);
-        TextView txtLocation = (TextView)view.findViewById(R.id.txtLocation);
-        TextView txtDestination = (TextView)view.findViewById(R.id.txtDestination);
+        txtLocation = (TextView)view.findViewById(R.id.txtLocation);
+        txtDestination = (TextView)view.findViewById(R.id.txtDestination);
         txtCalculate = (TextView)view.findViewById(R.id.txtCalculate);
 
         mService = Common.getGoogleService();
         getPrice(mLocation,mDestination);
-        txtLocation.setText(mLocation);
-        txtDestination.setText(mDestination);
+
+        if (!isTapOnMap) {
+            txtLocation.setText(mLocation);
+            txtDestination.setText(mDestination);
+        }
         return view;
     }
 
@@ -101,6 +107,15 @@ public class BottomSheetRiderFragment extends BottomSheetDialogFragment {
                                                     Common.getPrice(distance_value,time_value));
 
                         txtCalculate.setText(final_calculation);
+
+                        if (isTapOnMap)
+                        {
+                            String start_address = legsObject.getString("start_address");
+                            String end_address = legsObject.getString("end_address");
+
+                            txtLocation.setText(start_address);
+                            txtDestination.setText(end_address);
+                        }
 
 
                     } catch (JSONException e) {
